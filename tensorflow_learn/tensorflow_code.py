@@ -27,8 +27,8 @@ test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).shuffle(10000).ba
 
 class MyModel(Model):
     def __init__(self):
-        super(MyModel,self).__init__()
-        self.conv1 = Conv2D(32,3,activation= 'relu')
+        super(MyModel, self).__init__()
+        self.conv1 = Conv2D(32, 3, activation= 'relu')
         self.flatten = Flatten()
         self.d1 = Dense(128, activation= 'relu')
         self.d2 = Dense(10)
@@ -41,7 +41,7 @@ class MyModel(Model):
 
 model = MyModel()
 
-loss_object = tf.keras.losses.sparse_categorical_crossentropy(from_logits= True)
+loss_object = tf.keras.losses.SparseCategoricalCrossentropy(from_logits= True)
 optimizer = tf.keras.optimizers.Adam()
 
 train_loss = tf.keras.metrics.Mean(name = 'train_loss')
@@ -54,7 +54,7 @@ test_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(name='test_accuracy')
 def train_step(images, labels):
     # training = True is only needed if there are layers with different
     # behaviour during training versus inference (e.g Dropout)
-    with tf.Gradientape() as tape:
+    with tf.GradientTape() as tape:
         predictions = model(images, training=True)
         loss = loss_object(labels, predictions)
     gradients = tape.gradient(loss, model.trainable_variables)
@@ -82,9 +82,8 @@ for epoch in range(EPOCHS):
 
     for images, labels in train_ds:
         train_step(images, labels)
-    for test_images, test_images in test_ds:
-        test-step(test_images, test_labels
-                  )
+    for test_images, test_labels in test_ds:
+        test_step(test_images, test_labels)
     print(f'Epoch {epoch +1 }, '
           f'Loss: {train_loss.result()}, '
           f'Accuracy: {train_accuracy.result() * 100}, '
