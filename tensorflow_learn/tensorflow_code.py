@@ -3,18 +3,21 @@ import tensorflow as tf
 from tensorflow.keras.layers import Dense, Flatten, Conv2D
 from tensorflow.keras import Model
 
-#loading mnist dataset
+#loading mnist dataset(already vectorized i.e in array format)
 
 mnist = tf.keras.datasets.mnist
 
-(x_train, y_train), (x_test, y_test) = mnist.load_data()
-x_train, x_test = x_train /255.0, x_test /255.0
+# mnist data 60000 for training 10000 for testing. all are 28x28 shape
 
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+
+# applying pixel normalization i.e converting to 0-1 values
+
+x_train, x_test = x_train /255.0, x_test /255.0
 
 #add a channels dimention
 
 x_train = x_train[..., tf.newaxis].astype("float32")
-temp = x_train
 x_test = x_test[..., tf.newaxis].astype("float32")
 
 
@@ -54,7 +57,7 @@ test_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(name='test_accuracy')
 def train_step(images, labels):
     # training = True is only needed if there are layers with different
     # behaviour during training versus inference (e.g Dropout)
-    with tf.GradientTape() as tape:
+    with tf.GradientTape() as tape:   #GradientTape is to measure gradient ex dy/dx
         predictions = model(images, training=True)
         loss = loss_object(labels, predictions)
     gradients = tape.gradient(loss, model.trainable_variables)
