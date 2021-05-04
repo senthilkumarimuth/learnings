@@ -5,6 +5,7 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from nltk.corpus import stopwords
 STOPWORDS = set(stopwords.words('english'))
+import matplotlib.pyplot as plt 
 
 print(tf.__version__)
 
@@ -47,6 +48,14 @@ print(len(train_articles))
 print(len(train_labels))
 print(len(validation_articles))
 print(len(validation_labels))
+
+tokenizer = Tokenizer(num_words = vocab_size, oov_token=oov_tok)
+tokenizer.fit_on_texts(train_articles)
+word_index = tokenizer.word_index
+dict(list(word_index.items())[0:10])
+
+train_sequences = tokenizer.texts_to_sequences(train_articles)
+print(train_sequences[10])
 
 train_padded = pad_sequences(train_sequences, maxlen=max_length, padding=padding_type, truncating=trunc_type)
 print(len(train_sequences[0]))
