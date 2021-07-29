@@ -1,4 +1,14 @@
-#Let's consider this example
+#Hashing embedding helps us to share some vectors for a few vocabulary so that it helps for dimentionality rediction
+"""
+We show that models trained using hash embeddings exhibit at least the same level of
+performance as models trained using regular embeddings across a wide range of
+tasks. Furthermore, the number of parameters needed by such an embedding is
+only a fraction of what is required by a regular embedding. Since standard embeddings and embeddings constructed
+using the hashing trick are actually just special
+cases of a hash embedding, hash embeddings can be considered an extension and
+improvement over the existing regular embedding types.
+
+"""
 import numpy
 import mmh3
 
