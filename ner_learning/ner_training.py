@@ -6,31 +6,7 @@ import spacy
 from tqdm import tqdm
 from spacy.training.example import Example
 
-'''
-# to be used when the sample.json is created by the below link
-https://github.com/ManivannanMurugavel/spacy-ner-annotator
 
-import json
-f = open('sample.json')
-data = json.load(f)
-print(len(data))
-
-TRAIN_DATA =[]
-
-for dict in data:
-    temp_list=[]
-    temp_list.append(dict['content'])
-    temp_ent = []
-    for j in dict["entities"]:
-            j = j[:3]
-            k=[j[1],j[0],j[2]]
-            temp_ent.append(tuple(k))
-    temp_list.append({'entities':temp_ent})
-    temp_tuple = tuple(temp_list)
-    TRAIN_DATA.append(temp_tuple)
-print(TRAIN_DATA)
-
-'''
 TRAIN_DATA = [
 
     ('Update links diameter from t12 to t10', {
@@ -47,19 +23,19 @@ TRAIN_DATA = [
 
     ('Edit links diameter from t10 to t20', {
 
-        'entities': [(0, 4, 'T-Update'), (25, 28, 'O-target'), (32, 36, 'N-target')]
+        'entities': [(0, 4, 'T-Update'), (25, 28, 'O-target'), (32, 35, 'N-target')]
 
     }),
 
     ('Replace word columns with sections', {
 
-        'entities': [(0, 7, 'T-Update'), (13, 21, 'O-target'), (26, 35, 'N-target')]
+        'entities': [(0, 7, 'T-Update'), (13, 20, 'O-target'), (26, 34, 'N-target')]
 
     }),
 
     ('Replace text columns with sections', {
 
-        'entities': [(0, 7, 'T-Update'), (13, 21, 'O-target'), (26, 35, 'N-target')]
+        'entities': [(0, 7, 'T-Update'), (13, 20, 'O-target'), (26, 34, 'N-target')]
 
     }),
 
@@ -77,19 +53,19 @@ TRAIN_DATA = [
 
     ('Rephrase text centimeter as cm', {
 
-        'entities': [(0, 8, 'T-Update'), (13, 24, 'O-target'), (28, 30, 'N-target')]
+        'entities': [(0, 8, 'T-Update'), (14, 24, 'O-target'), (28, 30, 'N-target')]
 
     }),
 
     ('Rephrase word vert as verticle', {
 
-        'entities': [(0, 8, 'T-Update'), (13, 18, 'O-target'), (22, 30, 'N-target')]
+        'entities': [(0, 8, 'T-Update'), (14, 18, 'O-target'), (22, 30, 'N-target')]
 
     }),
 
     ('Change text scale to measurement', {
 
-        'entities': [(0, 6, 'T-Update'), (12, 16, 'O-target'), (20, 31, 'N-target')]
+        'entities': [(0, 6, 'T-Update'), (12, 17, 'O-target'), (21, 32, 'N-target')]
 
     }),
 
@@ -101,7 +77,7 @@ TRAIN_DATA = [
 
     ('Update word scale as measurement', {
 
-        'entities': [(0, 6, 'T-Update'), (12, 17, 'O-target'), (21, 31, 'N-target')]
+        'entities': [(0, 6, 'T-Update'), (12, 17, 'O-target'), (21, 32, 'N-target')]
 
     }),
 
@@ -143,7 +119,7 @@ TRAIN_DATA = [
 
     ('Add text centimeter after 100', {
 
-        'entities': [(0, 3, 'T-Insert'), (9, 19, 'target'), (20, 300, 'position')]
+        'entities': [(0, 3, 'T-Insert'), (9, 19, 'target'), (20, 29, 'position')]
 
     }),
 
@@ -221,7 +197,7 @@ TRAIN_DATA = [
 
     ('Remove word column', {
 
-        'entities': [(0, 6, 'T-Delete'), (12, 17, 'target')]
+        'entities': [(0, 6, 'T-Delete'), (12, 18, 'target')]
 
     }),
 
@@ -269,7 +245,7 @@ TRAIN_DATA = [
 
     ('Remove word grid', {
 
-        'entities': [(0, 6, 'T-Delete'), (12, 17, 'target')]
+        'entities': [(0, 6, 'T-Delete'), (12, 16, 'target')]
 
     }),
 
@@ -281,45 +257,39 @@ TRAIN_DATA = [
 
     ('Remove word refer', {
 
-        'entities': [(0, 6, 'T-Delete'), (12, 16, 'target')]
+        'entities': [(0, 6, 'T-Delete'), (12, 17, 'target')]
+
+    }),
+    ('I travelled from thanjavur to bangalore yesterday', {
+
+        'entities': [(0,1, 'person'), (17, 26, 'O-target'), (30, 39, 'N-target'), (40, 49, 'time')]
+
+    }),
+    ('I sat there for a moment', {
+
+        'entities': [(0,1, 'person'),(18, 24, 'time')]
+
+    }),
+    ('he exchanged his old phone for a new phone', {
+
+        'entities': [(0,2, 'person')]
+
+    }),
+    ('I need a break', {
+
+        'entities': [(0,1, 'person'),(9, 14, 'time')]
 
     })
-
 ]
 
-TRAIN_DATA1 = [
-    ('replace diameter from 1500 to 800', {
-        'entities': [(0, 5, 'action'),(22,25, "source"),(30,33, "target")]
-    }),
-     ('erase word connect', {
-        'entities': [(0, 5, 'action'), (12,18,"target")]
-    }),
-    ('include word square in the middle', {
-        'entities': [(0, 2, 'action'), (9, 14, 'target')]
-    })
-]
-
-''''
-TRAIN_DATA = [
-    ('Who is Nishanth?', {
-        'entities': [(7, 15, 'PERSON')]
-    }),
-     ('Who is Kamal Khumar?', {
-        'entities': [(7, 19, 'PERSON')]
-    }),
-    ('I like London and Berlin.', {
-        'entities': [(7, 13, 'LOC'), (18, 24, 'LOC')]
-    })
-]
-'''
 model = None
 output_dir=Path(r'.\\ner_model')
-n_iter=10
+n_iter=100
 
 #load the model
 """"
 if model is not None:
-    nlp = spacy.load(model)
+    nlp = spacy.load(output_dir)
     print("Loaded model '%s'" % model)
 else:
 """
@@ -342,22 +312,20 @@ for _, annotations in TRAIN_DATA:
 other_pipes = [pipe for pipe in nlp.pipe_names if pipe != 'ner']
 with nlp.disable_pipes(*other_pipes):  # only train NER
     optimizer = nlp.begin_training()
-    for itn in range(n_iter):   #Todo: use tqdm to show the progress
+    iterations = [i for i in range(n_iter)]
+    for itn in tqdm(iterations):
         random.shuffle(TRAIN_DATA)
         losses = {}
-        for text, annotations in tqdm(TRAIN_DATA):
-            doc = nlp.make_doc(text)
+        for text, annotations in TRAIN_DATA:
+            doc = nlp.make_doc(text.lower())
             example = Example.from_dict(doc, annotations)
             nlp.update(
                 [example],
-                drop=0.2,
+                drop=0.1,
                 sgd=optimizer,
                 losses=losses)
-        print(losses)
+        #print(losses)
 
-for text, _ in TRAIN_DATA1:
-    doc = nlp(text)
-    print('Entities', [(ent.text, ent.label_) for ent in doc.ents])
 
 if output_dir is not None:
     output_dir = Path(output_dir)
@@ -365,3 +333,36 @@ if output_dir is not None:
         output_dir.mkdir()
     nlp.to_disk(output_dir)
 
+#Testing NER model performance
+
+from spacy.training.example import Example
+
+test_data = [
+    ('replace diameter from 1500 to 800', {
+        'entities': [(0, 7, 'T-Update'),(22,26, "O-target"),(30,33, "N-target")]
+    }),
+     ('erase word connect', {
+        'entities': [(0, 5, 'T-Delete'), (11,18,"target")]
+    }),
+    ('include word square in the middle', {
+        'entities': [(0, 7, 'T-Insert'), (13, 19, 'target'),(27, 33, 'position')]
+    })
+]
+#, ('senthil will go to park tomorrow', {        'entities': [(0, 7, 'person'), (24, 32, 'time')]    })
+
+# Training data accuracy
+
+examples = []
+for text, annots in TRAIN_DATA:
+    doc = nlp(text)
+    print('Entities', [(ent.text, ent.label_) for ent in doc.ents])
+    examples.append(Example.from_dict(doc, annots))
+print(nlp.evaluate(examples)) # This will provide overall and per entity metrics
+
+#test data accuracy
+examples = []
+for text, annots in test_data:
+    doc = nlp(text)
+    print('Entities', [(ent.text, ent.label_) for ent in doc.ents])
+    examples.append(Example.from_dict(doc, annots))
+print(nlp.evaluate(examples)) # This will provide overall and per entity metrics
