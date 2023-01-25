@@ -9,8 +9,11 @@ __pycache__/
 .Python
 env/
 reports/*
-venv/
+venv_research_develop/
 build/
+Lib/
+Scripts/
+pyvenv.cfg
 develop-eggs/
 dist/
 downloads/
